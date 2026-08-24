@@ -309,6 +309,7 @@ body.ready #webgl{
     overflow:hidden;
 
     border:1px solid rgba(255,255,255,.12);
+    border-radius:16px;
 
     background:
         radial-gradient(
@@ -333,11 +334,22 @@ body.ready #webgl{
     opacity:.85;
 }
 
+.memory-media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
 .memory-card::before{
     content:"";
 
     position:absolute;
     inset:0;
+    z-index:2;
+    pointer-events:none;
 
     background:
         radial-gradient(
@@ -367,6 +379,8 @@ body.ready #webgl{
 
     position:absolute;
     inset:0;
+    z-index:2;
+    pointer-events:none;
 
     background:
         linear-gradient(
@@ -376,30 +390,13 @@ body.ready #webgl{
         );
 }
 
-.memory-symbol{
-    position:absolute;
-    inset:0;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    z-index:1;
-
-    font-family:"Cormorant Garamond",serif;
-
-    font-size:clamp(80px,15vw,150px);
-
-    color:rgba(255,255,255,.08);
-}
-
 .memory-label{
     position:absolute;
 
     left:20px;
     bottom:18px;
 
-    z-index:2;
+    z-index:3;
 
     font-size:8px;
 
@@ -1281,9 +1278,7 @@ body.ready #webgl{
             "
         >
 
-            <div class="memory-symbol">
-                22
-            </div>
+            <img src="memory-01.webp" alt="Memory 1" class="memory-media">
 
             <div class="memory-label">
                 22.10 · 01
@@ -1301,9 +1296,7 @@ body.ready #webgl{
             "
         >
 
-            <div class="memory-symbol">
-                ♡
-            </div>
+            <img src="memory-02.webp" alt="Memory 2" class="memory-media">
 
             <div class="memory-label">
                 memory · 02
@@ -1321,9 +1314,7 @@ body.ready #webgl{
             "
         >
 
-            <div class="memory-symbol">
-                ∞
-            </div>
+            <img src="memory-03.webp" alt="Memory 3" class="memory-media">
 
             <div class="memory-label">
                 memory · 03
@@ -1341,9 +1332,7 @@ body.ready #webgl{
             "
         >
 
-            <div class="memory-symbol">
-                10
-            </div>
+            <video src="memory-01.mp4" autoplay loop muted playsinline class="memory-media"></video>
 
             <div class="memory-label">
                 memory · 04
@@ -1557,13 +1546,28 @@ But I'm glad this one began.</div>
 
 </main>
 
-<!-- JS Script with verified imports -->
+
 <script type="module">
 
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
-import { gsap } from "https://cdn.jsdelivr.net/npm/gsap@3.12.5/index.js";
-import { ScrollTrigger } from "https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigger.js";
-import Lenis from "https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/+esm";
+/*
+====================================================
+   EXTERNAL LIBRARIES
+   NO ASSETS FOLDER REQUIRED
+====================================================
+*/
+
+import * as THREE
+from "https://esm.sh/three@0.180.0";
+
+import { gsap }
+from "https://esm.sh/gsap@3.13.0";
+
+import { ScrollTrigger }
+from "https://esm.sh/gsap@3.13.0/ScrollTrigger";
+
+import Lenis
+from "https://esm.sh/lenis@1.3.11";
+
 
 /*
 ====================================================
