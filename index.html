@@ -2,19 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,
-      initial-scale=1.0,
-      viewport-fit=cover">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#050507">
 
 <title>22.10 — 10 Months</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
@@ -35,6 +29,7 @@
 
 html{
     background:var(--bg);
+    scroll-behavior:auto;
 }
 
 body{
@@ -59,8 +54,7 @@ canvas{
 
 #webgl{
     opacity:0;
-    transition:
-        opacity 1.8s cubic-bezier(.16,1,.3,1);
+    transition:opacity 1.8s cubic-bezier(.16,1,.3,1);
 }
 
 body.ready #webgl{
@@ -82,12 +76,14 @@ body.ready #webgl{
 }
 
 @keyframes noise{
-    0%{transform:translate(0);}
-    25%{transform:translate(2%,1%);}
-    50%{transform:translate(-1%,2%);}
-    75%{transform:translate(1%,-2%);}
-    100%{transform:translate(0);}
+    0%{transform:translate(0)}
+    25%{transform:translate(2%,1%)}
+    50%{transform:translate(-1%,2%)}
+    75%{transform:translate(1%,-2%)}
+    100%{transform:translate(0)}
 }
+
+/* LOADER */
 
 #loader{
     position:fixed;
@@ -99,9 +95,7 @@ body.ready #webgl{
     align-items:center;
     justify-content:center;
 
-    transition:
-        opacity 1.5s,
-        visibility 1.5s;
+    transition:opacity 1.5s,visibility 1.5s;
 }
 
 #loader.hide{
@@ -118,13 +112,10 @@ body.ready #webgl{
     height:7px;
     border-radius:50%;
     background:white;
-
     box-shadow:
         0 0 15px white,
         0 0 50px rgba(232,184,185,.5);
-
     margin:auto;
-
     animation:breathe 1.8s ease-in-out infinite;
 }
 
@@ -133,7 +124,6 @@ body.ready #webgl{
         transform:scale(.7);
         opacity:.5;
     }
-
     50%{
         transform:scale(1.6);
         opacity:1;
@@ -147,6 +137,8 @@ body.ready #webgl{
     text-transform:uppercase;
     color:var(--muted);
 }
+
+/* INTRO */
 
 #intro{
     position:fixed;
@@ -168,10 +160,7 @@ body.ready #webgl{
 
 .intro-date{
     font-family:"Cormorant Garamond",serif;
-
-    font-size:
-        clamp(90px,17vw,260px);
-
+    font-size:clamp(90px,17vw,260px);
     font-weight:300;
     line-height:.75;
     letter-spacing:-.06em;
@@ -192,15 +181,13 @@ body.ready #webgl{
 
 .intro-small{
     margin-top:16px;
-
     font-family:"Cormorant Garamond",serif;
-
-    font-size:
-        clamp(20px,3vw,34px);
-
+    font-size:clamp(20px,3vw,34px);
     color:rgba(255,255,255,.75);
     opacity:0;
 }
+
+/* STORY */
 
 #story{
     position:relative;
@@ -233,14 +220,13 @@ body.ready #webgl{
 
 .chapter-title{
     font-family:"Cormorant Garamond",serif;
-
-    font-size:
-        clamp(55px,10vw,145px);
-
+    font-size:clamp(55px,10vw,145px);
     line-height:.8;
     font-weight:300;
     letter-spacing:-.055em;
 }
+
+/* MEMORIES */
 
 .memory-zone{
     height:220vh;
@@ -264,46 +250,56 @@ body.ready #webgl{
 
     overflow:hidden;
 
-    border:
-        1px solid
-        rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.12);
 
-    background:#101013;
+    background:
+        radial-gradient(
+            circle at 30% 20%,
+            rgba(255,255,255,.18),
+            transparent 25%
+        ),
+        linear-gradient(
+            145deg,
+            #242126,
+            #09090b 60%,
+            #181317
+        );
 
     box-shadow:
-        0 40px 100px
-        rgba(0,0,0,.6);
+        0 40px 100px rgba(0,0,0,.6);
 
     transform:
-        translate3d(
-            var(--x),
-            var(--y),
-            0
-        )
+        translate3d(var(--x),var(--y),0)
         rotate(var(--r));
 
     opacity:.85;
 }
 
-.memory-card img,
-.memory-card video{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
+.memory-card::before{
+    content:"";
 
-    filter:
-        saturate(.8)
-        contrast(1.05);
+    position:absolute;
+    inset:0;
 
-    transition:
-        transform 1.2s
-        cubic-bezier(.16,1,.3,1);
+    background:
+        radial-gradient(
+            circle at 70% 75%,
+            rgba(232,184,185,.35),
+            transparent 30%
+        );
+
+    animation:memoryGlow 5s ease-in-out infinite alternate;
 }
 
-.memory-card:hover img,
-.memory-card:hover video{
-    transform:scale(1.08);
+@keyframes memoryGlow{
+    from{
+        transform:scale(1);
+        opacity:.5;
+    }
+    to{
+        transform:scale(1.25);
+        opacity:1;
+    }
 }
 
 .memory-card::after{
@@ -315,11 +311,25 @@ body.ready #webgl{
     background:
         linear-gradient(
             180deg,
-            transparent 50%,
-            rgba(0,0,0,.6)
+            transparent 45%,
+            rgba(0,0,0,.75)
         );
+}
 
-    pointer-events:none;
+.memory-symbol{
+    position:absolute;
+    inset:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(80px,15vw,150px);
+
+    color:rgba(255,255,255,.08);
+
+    z-index:1;
 }
 
 .memory-label{
@@ -351,6 +361,8 @@ body.ready #webgl{
 
     white-space:nowrap;
 }
+
+/* TIMELINE */
 
 #timeline{
     height:180vh;
@@ -389,9 +401,7 @@ body.ready #webgl{
     width:16px;
     height:16px;
 
-    border:
-        1px solid
-        rgba(255,255,255,.35);
+    border:1px solid rgba(255,255,255,.35);
 
     border-radius:50%;
     background:#050507;
@@ -420,8 +430,7 @@ body.ready #webgl{
 
     box-shadow:
         0 0 20px white,
-        0 0 60px
-        rgba(232,184,185,.6);
+        0 0 60px rgba(232,184,185,.6);
 
     transform:scale(1.7);
 }
@@ -434,8 +443,7 @@ body.ready #webgl{
 .ten{
     font-family:"Cormorant Garamond",serif;
 
-    font-size:
-        clamp(180px,35vw,500px);
+    font-size:clamp(180px,35vw,500px);
 
     line-height:.7;
     font-weight:300;
@@ -450,6 +458,8 @@ body.ready #webgl{
     color:var(--muted);
     text-transform:uppercase;
 }
+
+/* HEART */
 
 #heartScene{
     height:180vh;
@@ -475,11 +485,12 @@ body.ready #webgl{
 .heart-title h2{
     font-family:"Cormorant Garamond",serif;
 
-    font-size:
-        clamp(60px,10vw,140px);
+    font-size:clamp(60px,10vw,140px);
 
     font-weight:300;
 }
+
+/* UNIVERSE */
 
 #universe{
     height:200vh;
@@ -493,12 +504,13 @@ body.ready #webgl{
 .universe-copy p{
     font-family:"Cormorant Garamond",serif;
 
-    font-size:
-        clamp(25px,4vw,48px);
+    font-size:clamp(25px,4vw,48px);
 
     line-height:.95;
     color:rgba(255,255,255,.82);
 }
+
+/* LETTER */
 
 .letter-section{
     height:180vh;
@@ -537,8 +549,7 @@ body.ready #webgl{
     border-radius:4px;
 
     box-shadow:
-        0 30px 80px
-        rgba(0,0,0,.5);
+        0 30px 80px rgba(0,0,0,.5);
 }
 
 .env-flap{
@@ -608,8 +619,7 @@ body.ready #webgl{
 
     font-family:"Cormorant Garamond",serif;
 
-    font-size:
-        clamp(25px,4vw,44px);
+    font-size:clamp(25px,4vw,44px);
 
     line-height:1;
     color:rgba(255,255,255,.85);
@@ -620,8 +630,7 @@ body.ready #webgl{
 .envelope.open ~ .letter-message{
     opacity:1;
 
-    transform:
-        translateY(30px);
+    transform:translateY(30px);
 }
 
 .letter-hint{
@@ -632,6 +641,8 @@ body.ready #webgl{
     color:var(--muted);
     text-transform:uppercase;
 }
+
+/* END */
 
 #ending{
     height:180vh;
@@ -644,8 +655,7 @@ body.ready #webgl{
 .final-date{
     font-family:"Cormorant Garamond",serif;
 
-    font-size:
-        clamp(80px,14vw,190px);
+    font-size:clamp(80px,14vw,190px);
 
     font-weight:300;
     letter-spacing:-.06em;
@@ -668,8 +678,7 @@ body.ready #webgl{
 .final-title{
     font-family:"Cormorant Garamond",serif;
 
-    font-size:
-        clamp(28px,5vw,65px);
+    font-size:clamp(28px,5vw,65px);
 
     font-weight:300;
 }
@@ -685,8 +694,7 @@ body.ready #webgl{
 }
 
 #finalHeart{
-    font-size:
-        clamp(60px,12vw,140px);
+    font-size:clamp(60px,12vw,140px);
 
     opacity:0;
     filter:blur(20px);
@@ -703,9 +711,7 @@ body.ready #webgl{
 .replay{
     margin-top:60px;
 
-    border:
-        1px solid
-        rgba(255,255,255,.2);
+    border:1px solid rgba(255,255,255,.2);
 
     background:transparent;
 
@@ -726,6 +732,8 @@ body.ready #webgl{
     color:#050507;
 }
 
+/* MUSIC */
+
 .music{
     position:fixed;
 
@@ -737,14 +745,11 @@ body.ready #webgl{
     width:44px;
     height:44px;
 
-    border:
-        1px solid
-        rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.18);
 
     border-radius:50%;
 
-    background:
-        rgba(0,0,0,.25);
+    background:rgba(0,0,0,.25);
 
     backdrop-filter:blur(10px);
 
@@ -773,18 +778,15 @@ body.ready #webgl{
 }
 
 .music.playing .sound-bars i:nth-child(1){
-    animation:
-        sound .7s infinite alternate;
+    animation:sound .7s infinite alternate;
 }
 
 .music.playing .sound-bars i:nth-child(2){
-    animation:
-        sound .5s .1s infinite alternate;
+    animation:sound .5s .1s infinite alternate;
 }
 
 .music.playing .sound-bars i:nth-child(3){
-    animation:
-        sound .8s .2s infinite alternate;
+    animation:sound .8s .2s infinite alternate;
 }
 
 @keyframes sound{
@@ -792,6 +794,8 @@ body.ready #webgl{
         height:13px;
     }
 }
+
+/* PROGRESS */
 
 .progress{
     position:fixed;
@@ -804,11 +808,9 @@ body.ready #webgl{
     width:1px;
     height:100px;
 
-    background:
-        rgba(255,255,255,.12);
+    background:rgba(255,255,255,.12);
 
-    transform:
-        translateY(-50%);
+    transform:translateY(-50%);
 }
 
 .progress-fill{
@@ -816,6 +818,8 @@ body.ready #webgl{
     height:0;
     background:white;
 }
+
+/* CURSOR */
 
 .cursor{
     position:fixed;
@@ -833,8 +837,7 @@ body.ready #webgl{
 
     mix-blend-mode:difference;
 
-    transform:
-        translate(-50%,-50%);
+    transform:translate(-50%,-50%);
 
     transition:.35s;
 }
@@ -844,6 +847,8 @@ body.ready #webgl{
     height:55px;
 }
 
+/* EASTER EGG */
+
 #easterEgg{
     position:fixed;
 
@@ -851,8 +856,7 @@ body.ready #webgl{
 
     z-index:900;
 
-    background:
-        rgba(3,3,5,.92);
+    background:rgba(3,3,5,.92);
 
     display:flex;
 
@@ -877,8 +881,7 @@ body.ready #webgl{
 .egg-inner{
     font-family:"Cormorant Garamond",serif;
 
-    font-size:
-        clamp(30px,6vw,70px);
+    font-size:clamp(30px,6vw,70px);
 
     line-height:.9;
 }
@@ -903,9 +906,7 @@ body.ready #webgl{
 
     background:transparent;
 
-    border:
-        1px solid
-        rgba(255,255,255,.25);
+    border:1px solid rgba(255,255,255,.25);
 
     color:#fff;
 
@@ -937,6 +938,8 @@ body.ready #webgl{
     text-transform:uppercase;
 }
 
+/* MOBILE */
+
 @media(max-width:700px){
 
     .cursor{
@@ -958,8 +961,7 @@ body.ready #webgl{
     }
 
     .chapter-title{
-        font-size:
-            clamp(60px,18vw,100px);
+        font-size:clamp(60px,18vw,100px);
     }
 
     .memory-zone{
@@ -999,7 +1001,6 @@ body.ready #webgl{
     #touchHint{
         opacity:1;
     }
-
 }
 
 </style>
@@ -1008,17 +1009,13 @@ body.ready #webgl{
 <body class="loading">
 
 <div id="loader">
-
     <div class="loader-core">
-
         <div class="loader-orb"></div>
 
         <div class="loader-text">
             preparing our little universe
         </div>
-
     </div>
-
 </div>
 
 <div class="noise"></div>
@@ -1027,33 +1024,23 @@ body.ready #webgl{
 
 <div class="cursor"></div>
 
-<button
-    class="music"
-    id="musicBtn"
-    aria-label="Toggle music"
->
-
+<button class="music" id="musicBtn" aria-label="Toggle music">
     <span class="sound-bars">
-
         <i></i>
         <i></i>
         <i></i>
-
     </span>
-
 </button>
 
 <div class="progress">
-
     <div class="progress-fill"></div>
-
 </div>
 
 <div id="touchHint">
-
     touch the screen · then keep scrolling
-
 </div>
+
+<!-- INTRO -->
 
 <div id="intro">
 
@@ -1075,18 +1062,7 @@ body.ready #webgl{
 
 </div>
 
-<audio
-    id="music"
-    loop
-    preload="none"
->
-
-    <source
-        src="assets/audio/music.mp3"
-        type="audio/mpeg"
-    >
-
-</audio>
+<!-- NO ASSETS NEEDED -->
 
 <div id="easterEgg">
 
@@ -1097,7 +1073,6 @@ body.ready #webgl{
         </small>
 
         you found<br>
-
         the little secret. ♡
 
         <br>
@@ -1112,6 +1087,8 @@ body.ready #webgl{
 
 <main id="story">
 
+<!-- CHAPTER I -->
+
 <section class="chapter">
 
     <div class="chapter-inner">
@@ -1121,21 +1098,18 @@ body.ready #webgl{
         </div>
 
         <h1 class="chapter-title">
-
             It<br>
             started<br>
             here.
-
         </h1>
 
     </div>
 
 </section>
 
-<section
-    class="memory-zone"
-    id="memories"
->
+<!-- MEMORIES -->
+
+<section class="memory-zone" id="memories">
 
     <div class="memory-stage">
 
@@ -1148,15 +1122,16 @@ body.ready #webgl{
             "
         >
 
-            <img
-                src="assets/images/memory-01.webp"
-            >
+            <div class="memory-symbol">
+                22
+            </div>
 
             <div class="memory-label">
                 22.10 · 01
             </div>
 
         </div>
+
 
         <div
             class="memory-card"
@@ -1167,15 +1142,16 @@ body.ready #webgl{
             "
         >
 
-            <img
-                src="assets/images/memory-02.webp"
-            >
+            <div class="memory-symbol">
+                ♡
+            </div>
 
             <div class="memory-label">
                 memory · 02
             </div>
 
         </div>
+
 
         <div
             class="memory-card"
@@ -1186,19 +1162,16 @@ body.ready #webgl{
             "
         >
 
-            <video
-                src="assets/videos/memory-01.mp4"
-                muted
-                playsinline
-                loop
-                preload="metadata"
-            ></video>
+            <div class="memory-symbol">
+                ∞
+            </div>
 
             <div class="memory-label">
-                memory · video
+                memory · 03
             </div>
 
         </div>
+
 
         <div
             class="memory-card"
@@ -1209,30 +1182,28 @@ body.ready #webgl{
             "
         >
 
-            <img
-                src="assets/images/memory-03.webp"
-            >
+            <div class="memory-symbol">
+                10
+            </div>
 
             <div class="memory-label">
-                memory · 03
+                memory · 04
             </div>
 
         </div>
 
+
         <div class="memory-hint">
-
             keep scrolling · memories appear in time
-
         </div>
 
     </div>
 
 </section>
 
-<section
-    class="chapter"
-    id="timeline"
->
+<!-- TIMELINE -->
+
+<section class="chapter" id="timeline">
 
     <div class="chapter-inner">
 
@@ -1273,10 +1244,9 @@ body.ready #webgl{
 
 </section>
 
-<section
-    class="chapter"
-    id="heartScene"
->
+<!-- HEART -->
+
+<section class="chapter" id="heartScene">
 
     <div class="heart-title">
 
@@ -1285,20 +1255,17 @@ body.ready #webgl{
         </small>
 
         <h2>
-
             something<br>
             remained.
-
         </h2>
 
     </div>
 
 </section>
 
-<section
-    class="chapter"
-    id="universe"
->
+<!-- UNIVERSE -->
+
+<section class="chapter" id="universe">
 
     <div class="universe-copy">
 
@@ -1324,14 +1291,13 @@ body.ready #webgl{
 
 </section>
 
+<!-- LETTER -->
+
 <section class="letter-section">
 
     <div class="letter-wrap">
 
-        <div
-            class="envelope"
-            id="envelope"
-        >
+        <div class="envelope" id="envelope">
 
             <div class="env-body"></div>
 
@@ -1343,10 +1309,7 @@ body.ready #webgl{
 
         </div>
 
-        <div
-            class="letter-message"
-            id="letterMessage"
-        >
+        <div class="letter-message" id="letterMessage">
 
 Ten months.
 
@@ -1370,10 +1333,9 @@ But I'm glad this one began.
 
 </section>
 
-<section
-    class="chapter"
-    id="ending"
->
+<!-- END -->
+
+<section class="chapter" id="ending">
 
     <div class="final">
 
@@ -1401,10 +1363,7 @@ But I'm glad this one began.
             ♥
         </div>
 
-        <button
-            class="replay"
-            id="replay"
-        >
+        <button class="replay" id="replay">
             replay our story
         </button>
 
@@ -1416,86 +1375,76 @@ But I'm glad this one began.
 
 <script type="module">
 
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+import * as THREE from
+"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-import { gsap } from "https://cdn.jsdelivr.net/npm/gsap@3.13.0/index.js";
+import { gsap } from
+"https://cdn.jsdelivr.net/npm/gsap@3.13.0/index.js";
 
-import { ScrollTrigger } from "https://cdn.jsdelivr.net/npm/gsap@3.13.0/ScrollTrigger.js";
+import { ScrollTrigger } from
+"https://cdn.jsdelivr.net/npm/gsap@3.13.0/ScrollTrigger.js";
 
-import Lenis from "https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.mjs";
+import Lenis from
+"https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.mjs";
 
 gsap.registerPlugin(ScrollTrigger);
 
 
-/* =========================================================
-   DOM
-========================================================= */
+/* DOM */
 
-const body =
-    document.body;
+const body = document.body;
 
 const loader =
-    document.getElementById("loader");
+document.getElementById("loader");
 
 const intro =
-    document.getElementById("intro");
+document.getElementById("intro");
 
 const introDate =
-    document.querySelector(".intro-date");
+document.querySelector(".intro-date");
 
 const introMonth =
-    document.querySelector(".intro-month");
+document.querySelector(".intro-month");
 
 const introSmall =
-    document.querySelector(".intro-small");
-
-const music =
-    document.getElementById("music");
+document.querySelector(".intro-small");
 
 const musicBtn =
-    document.getElementById("musicBtn");
+document.getElementById("musicBtn");
 
 const progressFill =
-    document.querySelector(".progress-fill");
+document.querySelector(".progress-fill");
 
 const envelope =
-    document.getElementById("envelope");
+document.getElementById("envelope");
 
 const replay =
-    document.getElementById("replay");
+document.getElementById("replay");
 
 const egg =
-    document.getElementById("easterEgg");
+document.getElementById("easterEgg");
 
 const eggClose =
-    document.querySelector(".egg-close");
+document.querySelector(".egg-close");
 
 const finalHeart =
-    document.getElementById("finalHeart");
+document.getElementById("finalHeart");
 
 
-/* =========================================================
-   LENIS
-========================================================= */
+/* LENIS */
 
 const lenis =
-    new Lenis({
-
-        duration:1.25,
-
-        smoothWheel:true,
-
-        smoothTouch:false
-
-    });
-
+new Lenis({
+    duration:1.25,
+    smoothWheel:true,
+    smoothTouch:false
+});
 
 function raf(time){
 
     lenis.raf(time);
 
     requestAnimationFrame(raf);
-
 }
 
 requestAnimationFrame(raf);
@@ -1506,32 +1455,21 @@ lenis.on(
 );
 
 
-/* =========================================================
-   THREE.JS
-========================================================= */
+/* THREE */
 
 const canvas =
-    document.getElementById("webgl");
+document.getElementById("webgl");
 
 const renderer =
-    new THREE.WebGLRenderer({
-
-        canvas,
-
-        antialias:true,
-
-        alpha:true,
-
-        powerPreference:
-            "high-performance"
-
-    });
+new THREE.WebGLRenderer({
+    canvas,
+    antialias:true,
+    alpha:true,
+    powerPreference:"high-performance"
+});
 
 renderer.setPixelRatio(
-    Math.min(
-        devicePixelRatio || 1,
-        1.7
-    )
+    Math.min(devicePixelRatio || 1,1.7)
 );
 
 renderer.setSize(
@@ -1540,59 +1478,44 @@ renderer.setSize(
 );
 
 renderer.outputColorSpace =
-    THREE.SRGBColorSpace;
+THREE.SRGBColorSpace;
 
 const scene =
-    new THREE.Scene();
+new THREE.Scene();
 
 scene.fog =
-    new THREE.FogExp2(
-        0x050507,
-        .035
-    );
-
-const camera =
-    new THREE.PerspectiveCamera(
-
-        55,
-
-        innerWidth / innerHeight,
-
-        .1,
-
-        2000
-
-    );
-
-camera.position.set(
-    0,
-    0,
-    18
+new THREE.FogExp2(
+    0x050507,
+    .035
 );
 
+const camera =
+new THREE.PerspectiveCamera(
+    55,
+    innerWidth / innerHeight,
+    .1,
+    2000
+);
 
-/* =========================================================
-   PARTICLES
-========================================================= */
+camera.position.set(0,0,18);
+
+
+/* PARTICLES */
 
 const mobile =
-    innerWidth < 700;
+innerWidth < 700;
 
 const count =
-    mobile ? 2200 : 6000;
+mobile ? 2200 : 6000;
 
 const pos =
-    new Float32Array(
-        count * 3
-    );
+new Float32Array(count*3);
 
 const base =
-    new Float32Array(
-        count * 3
-    );
+new Float32Array(count*3);
 
 const phase =
-    new Float32Array(count);
+new Float32Array(count);
 
 for(
     let i=0;
@@ -1601,101 +1524,66 @@ for(
 ){
 
     const radius =
-        15 +
-        Math.random() * 35;
+    15 + Math.random()*35;
 
     const theta =
-        Math.random() *
-        Math.PI * 2;
+    Math.random()*Math.PI*2;
 
     const phi =
-        Math.acos(
-            2 * Math.random() - 1
-        );
+    Math.acos(2*Math.random()-1);
 
-    const j =
-        i * 3;
+    const j=i*3;
 
     pos[j] =
     base[j] =
-        radius *
-        Math.sin(phi) *
-        Math.cos(theta);
+    radius*Math.sin(phi)*Math.cos(theta);
 
     pos[j+1] =
     base[j+1] =
-        radius *
-        Math.sin(phi) *
-        Math.sin(theta);
+    radius*Math.sin(phi)*Math.sin(theta);
 
     pos[j+2] =
     base[j+2] =
-        radius *
-        Math.cos(phi);
+    radius*Math.cos(phi);
 
     phase[i] =
-        Math.random() *
-        Math.PI * 2;
-
+    Math.random()*Math.PI*2;
 }
 
 const particleGeometry =
-    new THREE.BufferGeometry();
+new THREE.BufferGeometry();
 
 particleGeometry.setAttribute(
-
     "position",
-
-    new THREE.BufferAttribute(
-        pos,
-        3
-    )
-
+    new THREE.BufferAttribute(pos,3)
 );
 
 const particleMaterial =
-    new THREE.PointsMaterial({
-
-        color:0xffffff,
-
-        size:
-            mobile
-            ? .035
-            : .045,
-
-        transparent:true,
-
-        opacity:.72,
-
-        depthWrite:false,
-
-        blending:
-            THREE.AdditiveBlending
-
-    });
+new THREE.PointsMaterial({
+    color:0xffffff,
+    size:mobile?.035:.045,
+    transparent:true,
+    opacity:.72,
+    depthWrite:false,
+    blending:THREE.AdditiveBlending
+});
 
 const particles =
-    new THREE.Points(
-        particleGeometry,
-        particleMaterial
-    );
+new THREE.Points(
+    particleGeometry,
+    particleMaterial
+);
 
 scene.add(particles);
 
 
-/* =========================================================
-   HEART PARTICLES
-========================================================= */
+/* HEART */
 
 const heartCount =
-    mobile
-    ? 1100
-    : 2800;
+mobile ? 1100 : 2800;
 
 const heartPositions =
-    new Float32Array(
-        heartCount * 3
-    );
+new Float32Array(heartCount*3);
 
 for(
     let i=0;
@@ -1704,1134 +1592,565 @@ for(
 ){
 
     const t =
-        Math.random() *
-        Math.PI * 2;
+    Math.random()*Math.PI*2;
 
-    const j =
-        i * 3;
+    const j=i*3;
 
     heartPositions[j] =
-
-        16 *
-        Math.pow(
-            Math.sin(t),
-            3
-        ) *
-        .12
-        +
-        (Math.random()-.5)
-        *
-        .12;
+    16*Math.pow(Math.sin(t),3)*.12 +
+    (Math.random()-.5)*.12;
 
     heartPositions[j+1] =
-
-        (
-            13 *
-            Math.cos(t)
-
-            -
-
-            5 *
-            Math.cos(2*t)
-
-            -
-
-            2 *
-            Math.cos(3*t)
-
-            -
-
-            Math.cos(4*t)
-
-        )
-        *
-        .12
-
-        +
-
-        (Math.random()-.5)
-        *
-        .12;
+    (
+        13*Math.cos(t)
+        -5*Math.cos(2*t)
+        -2*Math.cos(3*t)
+        -Math.cos(4*t)
+    )*.12 +
+    (Math.random()-.5)*.12;
 
     heartPositions[j+2] =
-
-        (Math.random()-.5)
-        *
-        .7;
-
+    (Math.random()-.5)*.7;
 }
 
 const heartGeometry =
-    new THREE.BufferGeometry();
+new THREE.BufferGeometry();
 
 heartGeometry.setAttribute(
-
     "position",
-
     new THREE.BufferAttribute(
         heartPositions,
         3
     )
-
 );
 
 const heartMaterial =
-    new THREE.PointsMaterial({
-
-        color:0xe8b8b9,
-
-        size:
-            mobile
-            ? .045
-            : .065,
-
-        transparent:true,
-
-        opacity:0,
-
-        depthWrite:false,
-
-        blending:
-            THREE.AdditiveBlending
-
-    });
+new THREE.PointsMaterial({
+    color:0xe8b8b9,
+    size:mobile?.045:.065,
+    transparent:true,
+    opacity:0,
+    depthWrite:false,
+    blending:THREE.AdditiveBlending
+});
 
 const heart =
-    new THREE.Points(
-        heartGeometry,
-        heartMaterial
-    );
+new THREE.Points(
+    heartGeometry,
+    heartMaterial
+);
 
 heart.scale.setScalar(3.2);
 
 scene.add(heart);
 
 const light =
-    new THREE.PointLight(
-        0xe8b8b9,
-        0,
-        50
-    );
+new THREE.PointLight(
+    0xe8b8b9,
+    0,
+    50
+);
 
 scene.add(light);
 
 
-/* =========================================================
-   AUDIO ANALYSER
-========================================================= */
-
-let audioContext;
-
-let analyser;
-
-let audioData;
-
-async function initializeAudio(){
-
-    try{
-
-        audioContext =
-            new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
-
-        const source =
-            audioContext
-            .createMediaElementSource(
-                music
-            );
-
-        analyser =
-            audioContext
-            .createAnalyser();
-
-        analyser.fftSize =
-            128;
-
-        source.connect(
-            analyser
-        );
-
-        analyser.connect(
-            audioContext.destination
-        );
-
-        audioData =
-            new Uint8Array(
-                analyser.frequencyBinCount
-            );
-
-    }
-    catch(error){
-
-        console.warn(
-            "Audio analyser unavailable."
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   INTRO ANIMATION
-========================================================= */
+/* INTRO */
 
 const introTimeline =
-    gsap.timeline({
-
-        delay:.5
-
-    });
+gsap.timeline({
+    delay:.5
+});
 
 introTimeline
 
 .to(
-
     introDate,
-
     {
-
         opacity:1,
-
         scale:1,
-
         filter:"blur(0px)",
-
         duration:1.8,
-
         ease:"power4.out"
-
     }
-
 )
 
 .to(
-
     introMonth,
-
     {
-
         opacity:1,
-
         duration:1
-
     },
-
     "-=.7"
-
 )
 
 .to(
-
     introSmall,
-
     {
-
         opacity:1,
-
         duration:1
-
     },
-
     "-=.6"
-
 )
 
 .to(
-
     introDate,
-
     {
-
         opacity:0,
-
         scale:1.2,
-
         filter:"blur(10px)",
-
         duration:1.2,
-
         delay:1.2
-
     }
-
 )
 
 .to(
-
     introMonth,
-
     {
-
         opacity:0,
-
         duration:.5
-
     },
-
     "<"
-
 )
 
 .to(
-
     introSmall,
-
     {
-
         opacity:0,
-
         duration:.5
-
     },
-
     "<"
-
 )
 
 .to(
-
     intro,
-
     {
-
         opacity:0,
-
         duration:1.4,
 
         onComplete(){
 
-            intro.style.display =
-                "none";
+            intro.style.display="none";
 
-            body.classList.remove(
-                "loading"
-            );
+            body.classList.remove("loading");
 
-            body.classList.add(
-                "ready"
-            );
+            body.classList.add("ready");
 
             ScrollTrigger.refresh();
-
         }
-
     }
-
 );
 
 
-/* =========================================================
-   LOADER
-========================================================= */
+/* LOADER */
 
 window.addEventListener(
-
     "load",
-
-    () => {
-
+    ()=>{
         setTimeout(
-
-            () =>
-                loader.classList.add(
-                    "hide"
-                ),
-
+            ()=>{
+                loader.classList.add("hide");
+            },
             1000
-
         );
-
     }
-
 );
 
 
-/* =========================================================
-   SCROLL CAMERA
-========================================================= */
+/* CAMERA */
 
 gsap.to(
-
     camera.position,
-
     {
-
         z:2,
-
         y:-1,
 
         scrollTrigger:{
-
             trigger:".chapter",
-
             start:"top top",
-
             end:"bottom top",
-
             scrub:1.5
-
         }
-
     }
-
 );
 
 
-/* =========================================================
-   PARTICLE ROTATION
-========================================================= */
+/* PARTICLE ROTATION */
 
 gsap.to(
-
     particles.rotation,
-
     {
-
         z:Math.PI*.8,
 
         scrollTrigger:{
-
             trigger:".chapter",
-
             start:"top top",
-
             end:"bottom top",
-
             scrub:2
-
         }
-
     }
-
 );
 
 
-/* =========================================================
-   MEMORY CARDS
-========================================================= */
+/* MEMORY CARDS */
 
 document
 .querySelectorAll(".memory-card")
 .forEach(
-
     (card,index)=>{
 
         gsap.fromTo(
-
             card,
-
             {
-
                 scale:.7,
-
                 opacity:0,
-
                 filter:"blur(12px)"
-
             },
-
             {
-
                 scale:1,
-
                 opacity:.95,
-
                 filter:"blur(0)",
 
                 scrollTrigger:{
-
                     trigger:"#memories",
-
-                    start:
-                        `${index*12}% top`,
-
-                    end:
-                        `${index*12+25}% top`,
-
+                    start:`${index*12}% top`,
+                    end:`${index*12+25}% top`,
                     scrub:1
-
                 }
-
             }
-
         );
 
     }
-
 );
 
 
-/* =========================================================
-   TIMELINE
-========================================================= */
+/* TIMELINE */
 
 document
 .querySelectorAll(".month")
 .forEach(
-
     (month,index)=>{
 
         ScrollTrigger.create({
 
             trigger:"#timeline",
 
-            start:
-                `${index*7}% top`,
-
-            end:
-                `${index*7+18}% top`,
+            start:`${index*7}% top`,
+            end:`${index*7+18}% top`,
 
             onEnter(){
-
-                month.classList.add(
-                    "active"
-                );
-
+                month.classList.add("active");
             },
 
             onEnterBack(){
-
-                month.classList.add(
-                    "active"
-                );
-
+                month.classList.add("active");
             }
 
         });
 
     }
-
 );
 
 
-/* =========================================================
-   BIG 10
-========================================================= */
+/* BIG 10 */
 
 gsap.fromTo(
-
     ".ten",
-
     {
-
         scale:.3,
-
         opacity:0,
-
         filter:"blur(30px)"
-
     },
-
     {
-
         scale:1,
-
         opacity:1,
-
         filter:"blur(0)",
 
         scrollTrigger:{
-
             trigger:"#timeline",
-
             start:"25% center",
-
             end:"75% center",
-
             scrub:1.5
-
         }
-
     }
-
 );
 
 
-/* =========================================================
-   10 -> HEART
-========================================================= */
+/* 10 -> HEART */
 
 gsap.to(
-
     ".ten",
-
     {
-
         scale:1.8,
-
         opacity:0,
-
         filter:"blur(20px)",
 
         scrollTrigger:{
-
             trigger:"#heartScene",
-
             start:"top bottom",
-
             end:"center center",
-
             scrub:1.5
-
         }
-
     }
-
 );
 
 
-/* =========================================================
-   HEART SCENE
-========================================================= */
+/* HEART SCENE */
 
 ScrollTrigger.create({
 
     trigger:"#heartScene",
 
     start:"top center",
-
     end:"bottom center",
 
     onEnter(){
 
         gsap.to(
-
             heartMaterial,
-
             {
-
                 opacity:.9,
-
                 duration:2
-
             }
-
         );
 
         gsap.to(
-
             light,
-
             {
-
                 intensity:4,
-
                 duration:2
-
             }
-
         );
-
     },
 
     onLeave(){
 
         gsap.to(
-
             heartMaterial,
-
             {
-
                 opacity:0,
-
                 duration:1
-
             }
-
         );
 
         gsap.to(
-
             light,
-
             {
-
                 intensity:0,
-
                 duration:1
-
             }
-
         );
-
     },
 
     onEnterBack(){
 
         gsap.to(
-
             heartMaterial,
-
             {
-
                 opacity:.9,
-
                 duration:1.5
-
             }
-
         );
 
         gsap.to(
-
             light,
-
             {
-
                 intensity:4,
-
                 duration:1.5
-
             }
-
         );
-
     }
 
 });
 
 
-/* =========================================================
-   UNIVERSE
-========================================================= */
+/* UNIVERSE */
 
 gsap.to(
-
     particles.rotation,
-
     {
-
         x:Math.PI*.25,
-
         y:Math.PI*1.5,
 
         scrollTrigger:{
-
             trigger:"#universe",
-
             start:"top bottom",
-
             end:"bottom top",
-
             scrub:2
-
         }
-
     }
-
 );
 
-
 gsap.from(
-
     ".universe-copy p",
-
     {
-
         opacity:0,
-
         y:80,
-
         filter:"blur(15px)",
 
         scrollTrigger:{
-
             trigger:"#universe",
-
             start:"top center",
-
             end:"center center",
-
             scrub:1
-
         }
-
     }
-
 );
 
 
-/* =========================================================
-   ENVELOPE
-========================================================= */
+/* ENVELOPE */
 
 envelope.onclick =
 function(){
 
-    envelope.classList.toggle(
-        "open"
+    envelope.classList.toggle("open");
+
+};
+
+
+/* MUSIC BUTTON
+
+   რადგან assets/audio/music.mp3 აღარ გვაქვს,
+   ღილაკი ახლა უბრალოდ ვიზუალურად მუშაობს.
+*/
+
+let musicPlaying=false;
+
+musicBtn.onclick =
+function(){
+
+    musicPlaying=!musicPlaying;
+
+    musicBtn.classList.toggle(
+        "playing",
+        musicPlaying
     );
 
 };
 
 
-/* =========================================================
-   MUSIC BUTTON
-========================================================= */
-
-musicBtn.onclick =
-async function(){
-
-    if(music.paused){
-
-        try{
-
-            if(!audioContext)
-                await initializeAudio();
-
-            if(
-                audioContext &&
-                audioContext.state ===
-                "suspended"
-            ){
-
-                await audioContext.resume();
-
-            }
-
-            await music.play();
-
-            musicBtn.classList.add(
-                "playing"
-            );
-
-        }
-        catch(error){
-
-            console.log(error);
-
-        }
-
-    }
-    else{
-
-        music.pause();
-
-        musicBtn.classList.remove(
-            "playing"
-        );
-
-    }
-
-};
-
-
-/* =========================================================
-   PROGRESS
-========================================================= */
+/* PROGRESS */
 
 window.addEventListener(
-
     "scroll",
-
     ()=>{
 
         const max =
-            document.documentElement
-            .scrollHeight -
-            innerHeight;
+        document.documentElement.scrollHeight -
+        innerHeight;
 
         const progress =
-            max > 0
-            ? scrollY / max
-            : 0;
+        max>0 ? scrollY/max : 0;
 
         progressFill.style.height =
-            progress * 100 + "%";
+        progress*100+"%";
 
     },
-
     {
         passive:true
     }
-
 );
 
 
-/* =========================================================
-   VIDEO AUTO PLAY
-========================================================= */
+/* EASTER EGG */
 
-const videos =
-    document.querySelectorAll(
-        "video"
-    );
-
-const videoObserver =
-    new IntersectionObserver(
-
-        entries => {
-
-            entries.forEach(
-
-                entry => {
-
-                    if(
-                        entry.isIntersecting
-                    ){
-
-                        entry.target
-                            .play()
-                            .catch(()=>{});
-
-                    }
-                    else{
-
-                        entry.target.pause();
-
-                    }
-
-                }
-
-            );
-
-        },
-
-        {
-            threshold:.35
-        }
-
-    );
-
-videos.forEach(
-    video =>
-        videoObserver.observe(video)
-);
-
-
-/* =========================================================
-   EASTER EGG
-========================================================= */
-
-let taps = 0;
-
+let taps=0;
 let tapTimer;
 
 window.addEventListener(
-
     "pointerdown",
-
     ()=>{
 
-        clearTimeout(
-            tapTimer
-        );
+        clearTimeout(tapTimer);
 
         taps++;
 
-        if(taps >= 5){
+        if(taps>=5){
 
-            egg.classList.add(
-                "show"
-            );
+            egg.classList.add("show");
 
             taps=0;
-
         }
 
         tapTimer =
-            setTimeout(
-
-                ()=>{
-                    taps=0;
-                },
-
-                1300
-
-            );
+        setTimeout(
+            ()=>{
+                taps=0;
+            },
+            1300
+        );
 
     }
-
 );
 
 eggClose.onclick =
 function(){
 
-    egg.classList.remove(
-        "show"
-    );
+    egg.classList.remove("show");
 
 };
 
 egg.onclick =
 function(event){
 
-    if(
-        event.target === egg
-    ){
-
-        egg.classList.remove(
-            "show"
-        );
-
+    if(event.target===egg){
+        egg.classList.remove("show");
     }
 
 };
 
 
-/* =========================================================
-   MOBILE TOUCH
-========================================================= */
+/* TOUCH */
 
 let touchStartY=0;
 
 window.addEventListener(
-
     "touchstart",
-
-    event => {
-
+    event=>{
         touchStartY =
-            event.touches[0].clientY;
-
+        event.touches[0].clientY;
     },
-
     {
         passive:true
     }
-
 );
 
 window.addEventListener(
-
     "touchmove",
-
-    event => {
+    event=>{
 
         const difference =
-            touchStartY -
-            event.touches[0].clientY;
+        touchStartY -
+        event.touches[0].clientY;
 
-        if(
-            Math.abs(difference)>20
-        ){
+        if(Math.abs(difference)>20){
 
             heart.rotation.y +=
-                difference*.0008;
+            difference*.0008;
 
             heart.rotation.x +=
-                difference*.00025;
-
+            difference*.00025;
         }
 
     },
-
     {
         passive:true
     }
-
 );
 
 
-/* =========================================================
-   MUSIC REACTIVE
-========================================================= */
-
-let lastScroll = 0;
-
-window.addEventListener(
-
-    "scroll",
-
-    ()=>{
-
-        const delta =
-            Math.abs(
-                scrollY-lastScroll
-            );
-
-        if(
-            analyser &&
-            delta>0
-        ){
-
-            const strength =
-                Math.min(
-                    delta/100,
-                    1
-                );
-
-            gsap.to(
-
-                particleMaterial,
-
-                {
-
-                    size:
-                        (mobile?.035:.045)
-                        *
-                        (
-                            1 +
-                            strength*.8
-                        ),
-
-                    duration:.15,
-
-                    overwrite:true
-
-                }
-
-            );
-
-        }
-
-        lastScroll =
-            scrollY;
-
-    },
-
-    {
-        passive:true
-    }
-
-);
-
-
-/* =========================================================
-   RENDER LOOP
-========================================================= */
+/* RENDER */
 
 function render(){
 
     const time =
-        performance.now()*.001;
-
-    let beat=0;
-
-    if(analyser){
-
-        analyser.getByteFrequencyData(
-            audioData
-        );
-
-        for(
-            let i=0;
-            i<audioData.length;
-            i++
-        ){
-
-            beat +=
-                audioData[i];
-
-        }
-
-        beat /=
-            audioData.length *
-            255;
-
-    }
+    performance.now()*.001;
 
     particles.rotation.y =
-        time*.012;
+    time*.012;
 
     const positions =
-        particleGeometry
-        .attributes
-        .position
-        .array;
+    particleGeometry.attributes
+    .position.array;
 
     for(
         let i=0;
@@ -2842,97 +2161,60 @@ function render(){
         const j=i*3;
 
         const movement =
-            Math.sin(
-                time*1.2 +
-                phase[i]
-            )
-            *
-            .012
-            *
-            (
-                1+
-                beat*4
-            );
+        Math.sin(
+            time*1.2+
+            phase[i]
+        )*.012;
 
         positions[j] =
-            base[j] +
-            movement;
+        base[j]+movement;
 
         positions[j+1] =
-            base[j+1] +
-            movement;
-
+        base[j+1]+movement;
     }
 
     particleGeometry
-        .attributes
-        .position
-        .needsUpdate=true;
+    .attributes
+    .position
+    .needsUpdate=true;
 
     heart.rotation.y =
-        time*.15;
+    time*.15;
 
     heart.rotation.x =
-        Math.sin(
-            time*.2
-        )*.05;
+    Math.sin(time*.2)*.05;
 
     const pulse =
-
-        1 +
-
-        Math.sin(
-            time*2.2
-        )*.025 +
-
-        beat*.12;
+    1+Math.sin(time*2.2)*.025;
 
     heart.scale.setScalar(
         3.2*pulse
     );
 
     light.position.x =
-        Math.sin(time)*4;
+    Math.sin(time)*4;
 
     light.position.y =
-        Math.cos(time)*3;
-
-    if(
-        beat>.18
-    ){
-
-        light.intensity =
-            Math.max(
-                light.intensity,
-                2+beat*7
-            );
-
-    }
+    Math.cos(time)*3;
 
     renderer.render(
         scene,
         camera
     );
 
-    requestAnimationFrame(
-        render
-    );
-
+    requestAnimationFrame(render);
 }
 
 render();
 
 
-/* =========================================================
-   FINAL HEART
-========================================================= */
+/* FINAL HEART */
 
 ScrollTrigger.create({
 
     trigger:"#ending",
 
     start:"25% center",
-
     end:"70% center",
 
     scrub:1,
@@ -2940,93 +2222,63 @@ ScrollTrigger.create({
     onUpdate(self){
 
         const progress =
-            self.progress;
+        self.progress;
 
         gsap.to(
-
             finalHeart,
-
             {
-
                 opacity:progress,
 
                 filter:
-                    `blur(${
-                        20 -
-                        20*progress
-                    }px)`,
+                `blur(${
+                    20-20*progress
+                }px)`,
 
                 scale:
-                    1 +
-                    progress*1.4,
+                1+progress*1.4,
 
                 duration:.1,
-
                 overwrite:true
-
             }
-
         );
-
     }
 
 });
 
 
-/* =========================================================
-   REPLAY
-========================================================= */
+/* REPLAY */
 
 replay.onclick =
 function(){
 
     lenis.scrollTo(
-
         0,
-
         {
             duration:2.5
         }
-
     );
 
-    envelope.classList.remove(
-        "open"
-    );
-
-    music.currentTime=0;
+    envelope.classList.remove("open");
 
 };
 
 
-/* =========================================================
-   RESIZE
-========================================================= */
+/* RESIZE */
 
 window.addEventListener(
-
     "resize",
-
     ()=>{
 
         camera.aspect =
-            innerWidth /
-            innerHeight;
+        innerWidth/innerHeight;
 
         camera.updateProjectionMatrix();
 
         renderer.setPixelRatio(
-
             Math.min(
-
-                devicePixelRatio || 1,
-
-                innerWidth<700
-                ? 1.2
-                : 1.7
-
+                devicePixelRatio||1,
+                innerWidth<700 ? 1.2 : 1.7
             )
-
         );
 
         renderer.setSize(
@@ -3037,7 +2289,6 @@ window.addEventListener(
         ScrollTrigger.refresh();
 
     }
-
 );
 
 </script>
