@@ -1,0 +1,3046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,
+      initial-scale=1.0,
+      viewport-fit=cover">
+
+<meta name="theme-color" content="#050507">
+
+<title>22.10 — 10 Months</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --bg:#050507;
+    --text:#f5f2ed;
+    --muted:rgba(245,242,237,.52);
+    --line:rgba(255,255,255,.12);
+    --accent:#e8b8b9;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    background:var(--bg);
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:Inter,sans-serif;
+    overflow-x:hidden;
+}
+
+body.loading{
+    overflow:hidden;
+}
+
+canvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:0;
+    pointer-events:none;
+}
+
+#webgl{
+    opacity:0;
+    transition:
+        opacity 1.8s cubic-bezier(.16,1,.3,1);
+}
+
+body.ready #webgl{
+    opacity:1;
+}
+
+.noise{
+    position:fixed;
+    inset:-50%;
+    z-index:50;
+    pointer-events:none;
+    opacity:.035;
+
+    background-image:url(
+        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E"
+    );
+
+    animation:noise .2s infinite;
+}
+
+@keyframes noise{
+    0%{transform:translate(0);}
+    25%{transform:translate(2%,1%);}
+    50%{transform:translate(-1%,2%);}
+    75%{transform:translate(1%,-2%);}
+    100%{transform:translate(0);}
+}
+
+#loader{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    background:#030305;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    transition:
+        opacity 1.5s,
+        visibility 1.5s;
+}
+
+#loader.hide{
+    opacity:0;
+    visibility:hidden;
+}
+
+.loader-core{
+    text-align:center;
+}
+
+.loader-orb{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:white;
+
+    box-shadow:
+        0 0 15px white,
+        0 0 50px rgba(232,184,185,.5);
+
+    margin:auto;
+
+    animation:breathe 1.8s ease-in-out infinite;
+}
+
+@keyframes breathe{
+    0%,100%{
+        transform:scale(.7);
+        opacity:.5;
+    }
+
+    50%{
+        transform:scale(1.6);
+        opacity:1;
+    }
+}
+
+.loader-text{
+    margin-top:24px;
+    font-size:9px;
+    letter-spacing:.35em;
+    text-transform:uppercase;
+    color:var(--muted);
+}
+
+#intro{
+    position:fixed;
+    inset:0;
+    z-index:100;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+    pointer-events:none;
+}
+
+.intro-content{
+    position:relative;
+    z-index:2;
+}
+
+.intro-date{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:
+        clamp(90px,17vw,260px);
+
+    font-weight:300;
+    line-height:.75;
+    letter-spacing:-.06em;
+
+    opacity:0;
+    transform:scale(.8);
+    filter:blur(15px);
+}
+
+.intro-month{
+    margin-top:28px;
+    font-size:10px;
+    letter-spacing:.55em;
+    text-transform:uppercase;
+    color:var(--muted);
+    opacity:0;
+}
+
+.intro-small{
+    margin-top:16px;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:
+        clamp(20px,3vw,34px);
+
+    color:rgba(255,255,255,.75);
+    opacity:0;
+}
+
+#story{
+    position:relative;
+    z-index:2;
+}
+
+.chapter{
+    position:relative;
+    height:130vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    pointer-events:none;
+}
+
+.chapter-inner{
+    width:min(1200px,90%);
+    position:relative;
+}
+
+.chapter-number{
+    font-size:9px;
+    letter-spacing:.45em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:30px;
+}
+
+.chapter-title{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:
+        clamp(55px,10vw,145px);
+
+    line-height:.8;
+    font-weight:300;
+    letter-spacing:-.055em;
+}
+
+.memory-zone{
+    height:220vh;
+}
+
+.memory-stage{
+    position:sticky;
+    top:0;
+    height:100vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.memory-card{
+    position:absolute;
+
+    width:min(390px,70vw);
+    aspect-ratio:4/5;
+
+    overflow:hidden;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    background:#101013;
+
+    box-shadow:
+        0 40px 100px
+        rgba(0,0,0,.6);
+
+    transform:
+        translate3d(
+            var(--x),
+            var(--y),
+            0
+        )
+        rotate(var(--r));
+
+    opacity:.85;
+}
+
+.memory-card img,
+.memory-card video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+
+    filter:
+        saturate(.8)
+        contrast(1.05);
+
+    transition:
+        transform 1.2s
+        cubic-bezier(.16,1,.3,1);
+}
+
+.memory-card:hover img,
+.memory-card:hover video{
+    transform:scale(1.08);
+}
+
+.memory-card::after{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            180deg,
+            transparent 50%,
+            rgba(0,0,0,.6)
+        );
+
+    pointer-events:none;
+}
+
+.memory-label{
+    position:absolute;
+
+    left:20px;
+    bottom:18px;
+
+    z-index:2;
+
+    font-size:8px;
+    letter-spacing:.25em;
+    text-transform:uppercase;
+}
+
+.memory-hint{
+    position:absolute;
+
+    bottom:10%;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    color:var(--muted);
+
+    font-size:8px;
+    letter-spacing:.35em;
+    text-transform:uppercase;
+
+    white-space:nowrap;
+}
+
+#timeline{
+    height:180vh;
+}
+
+.timeline{
+    width:min(900px,80%);
+    position:relative;
+}
+
+.timeline-line{
+    position:absolute;
+
+    top:50%;
+    left:0;
+    right:0;
+
+    height:1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.25),
+            transparent
+        );
+}
+
+.months{
+    display:flex;
+    justify-content:space-between;
+    position:relative;
+}
+
+.month{
+    width:16px;
+    height:16px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.35);
+
+    border-radius:50%;
+    background:#050507;
+
+    transition:.8s;
+    position:relative;
+}
+
+.month::after{
+    content:attr(data-month);
+
+    position:absolute;
+
+    top:28px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    font-size:7px;
+    letter-spacing:.2em;
+    color:rgba(255,255,255,.25);
+}
+
+.month.active{
+    background:white;
+
+    box-shadow:
+        0 0 20px white,
+        0 0 60px
+        rgba(232,184,185,.6);
+
+    transform:scale(1.7);
+}
+
+.ten-display{
+    text-align:center;
+    margin-top:130px;
+}
+
+.ten{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:
+        clamp(180px,35vw,500px);
+
+    line-height:.7;
+    font-weight:300;
+    letter-spacing:-.1em;
+}
+
+.ten-caption{
+    margin-top:70px;
+
+    font-size:9px;
+    letter-spacing:.5em;
+    color:var(--muted);
+    text-transform:uppercase;
+}
+
+#heartScene{
+    height:180vh;
+}
+
+.heart-title{
+    text-align:center;
+    position:relative;
+    z-index:3;
+}
+
+.heart-title small{
+    display:block;
+
+    font-size:8px;
+    letter-spacing:.5em;
+    text-transform:uppercase;
+    color:var(--muted);
+
+    margin-bottom:30px;
+}
+
+.heart-title h2{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:
+        clamp(60px,10vw,140px);
+
+    font-weight:300;
+}
+
+#universe{
+    height:200vh;
+}
+
+.universe-copy{
+    text-align:center;
+    max-width:500px;
+}
+
+.universe-copy p{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:
+        clamp(25px,4vw,48px);
+
+    line-height:.95;
+    color:rgba(255,255,255,.82);
+}
+
+.letter-section{
+    height:180vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.letter-wrap{
+    text-align:center;
+}
+
+.envelope{
+    width:150px;
+    height:105px;
+
+    position:relative;
+    margin:auto;
+
+    cursor:pointer;
+    perspective:700px;
+}
+
+.env-body{
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ded6cf,
+            #9c9189
+        );
+
+    border-radius:4px;
+
+    box-shadow:
+        0 30px 80px
+        rgba(0,0,0,.5);
+}
+
+.env-flap{
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:65%;
+
+    background:#c7bdb5;
+
+    clip-path:
+        polygon(
+            0 0,
+            100% 0,
+            50% 100%
+        );
+
+    transform-origin:top;
+
+    transition:1.2s;
+    z-index:3;
+}
+
+.envelope.open .env-flap{
+    transform:rotateX(180deg);
+}
+
+.letter{
+    position:absolute;
+
+    left:50%;
+    bottom:20px;
+
+    width:125px;
+    height:85px;
+
+    background:#f2eee7;
+    color:#171517;
+
+    transform:translateX(-50%);
+
+    transition:1.3s;
+
+    padding:16px;
+    z-index:2;
+}
+
+.envelope.open .letter{
+    transform:
+        translateX(-50%)
+        translateY(-70px);
+}
+
+.letter-message{
+    opacity:0;
+
+    transform:translateY(50px);
+
+    transition:1.5s;
+
+    max-width:500px;
+
+    margin:40px auto 0;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:
+        clamp(25px,4vw,44px);
+
+    line-height:1;
+    color:rgba(255,255,255,.85);
+
+    white-space:pre-line;
+}
+
+.envelope.open ~ .letter-message{
+    opacity:1;
+
+    transform:
+        translateY(30px);
+}
+
+.letter-hint{
+    margin-top:30px;
+
+    font-size:8px;
+    letter-spacing:.35em;
+    color:var(--muted);
+    text-transform:uppercase;
+}
+
+#ending{
+    height:180vh;
+}
+
+.final{
+    text-align:center;
+}
+
+.final-date{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:
+        clamp(80px,14vw,190px);
+
+    font-weight:300;
+    letter-spacing:-.06em;
+}
+
+.final-line{
+    width:1px;
+    height:100px;
+
+    margin:30px auto;
+
+    background:
+        linear-gradient(
+            transparent,
+            rgba(255,255,255,.5),
+            transparent
+        );
+}
+
+.final-title{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:
+        clamp(28px,5vw,65px);
+
+    font-weight:300;
+}
+
+.final-sub{
+    margin-top:20px;
+
+    color:var(--muted);
+
+    font-size:9px;
+    letter-spacing:.4em;
+    text-transform:uppercase;
+}
+
+#finalHeart{
+    font-size:
+        clamp(60px,12vw,140px);
+
+    opacity:0;
+    filter:blur(20px);
+
+    margin-top:35px;
+
+    color:#e8b8b9;
+
+    text-shadow:
+        0 0 40px rgba(232,184,185,.5),
+        0 0 100px rgba(232,184,185,.2);
+}
+
+.replay{
+    margin-top:60px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.2);
+
+    background:transparent;
+
+    color:white;
+
+    padding:15px 28px;
+
+    font-size:8px;
+    letter-spacing:.35em;
+    text-transform:uppercase;
+
+    cursor:pointer;
+    transition:.5s;
+}
+
+.replay:hover{
+    background:#fff;
+    color:#050507;
+}
+
+.music{
+    position:fixed;
+
+    z-index:70;
+
+    right:25px;
+    bottom:25px;
+
+    width:44px;
+    height:44px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.18);
+
+    border-radius:50%;
+
+    background:
+        rgba(0,0,0,.25);
+
+    backdrop-filter:blur(10px);
+
+    color:white;
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.sound-bars{
+    display:flex;
+    align-items:center;
+    gap:2px;
+    height:13px;
+}
+
+.sound-bars i{
+    display:block;
+
+    width:1px;
+    height:5px;
+
+    background:white;
+}
+
+.music.playing .sound-bars i:nth-child(1){
+    animation:
+        sound .7s infinite alternate;
+}
+
+.music.playing .sound-bars i:nth-child(2){
+    animation:
+        sound .5s .1s infinite alternate;
+}
+
+.music.playing .sound-bars i:nth-child(3){
+    animation:
+        sound .8s .2s infinite alternate;
+}
+
+@keyframes sound{
+    to{
+        height:13px;
+    }
+}
+
+.progress{
+    position:fixed;
+
+    z-index:60;
+
+    right:28px;
+    top:50%;
+
+    width:1px;
+    height:100px;
+
+    background:
+        rgba(255,255,255,.12);
+
+    transform:
+        translateY(-50%);
+}
+
+.progress-fill{
+    width:100%;
+    height:0;
+    background:white;
+}
+
+.cursor{
+    position:fixed;
+
+    z-index:999;
+
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:white;
+
+    pointer-events:none;
+
+    mix-blend-mode:difference;
+
+    transform:
+        translate(-50%,-50%);
+
+    transition:.35s;
+}
+
+.cursor.big{
+    width:55px;
+    height:55px;
+}
+
+#easterEgg{
+    position:fixed;
+
+    inset:0;
+
+    z-index:900;
+
+    background:
+        rgba(3,3,5,.92);
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.8s;
+
+    backdrop-filter:blur(15px);
+}
+
+#easterEgg.show{
+    opacity:1;
+    visibility:visible;
+}
+
+.egg-inner{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:
+        clamp(30px,6vw,70px);
+
+    line-height:.9;
+}
+
+.egg-inner small{
+    display:block;
+
+    font-family:Inter;
+
+    font-size:8px;
+    letter-spacing:.4em;
+
+    color:var(--muted);
+
+    margin-bottom:25px;
+
+    text-transform:uppercase;
+}
+
+.egg-close{
+    margin-top:35px;
+
+    background:transparent;
+
+    border:
+        1px solid
+        rgba(255,255,255,.25);
+
+    color:#fff;
+
+    padding:12px 20px;
+
+    font-size:8px;
+    letter-spacing:.3em;
+    text-transform:uppercase;
+}
+
+#touchHint{
+    position:fixed;
+
+    inset:auto 0 8%;
+
+    z-index:80;
+
+    text-align:center;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    font-size:8px;
+    letter-spacing:.35em;
+
+    color:var(--muted);
+
+    text-transform:uppercase;
+}
+
+@media(max-width:700px){
+
+    .cursor{
+        display:none;
+    }
+
+    .progress{
+        right:15px;
+        height:70px;
+    }
+
+    .music{
+        right:15px;
+        bottom:15px;
+    }
+
+    .chapter{
+        height:110vh;
+    }
+
+    .chapter-title{
+        font-size:
+            clamp(60px,18vw,100px);
+    }
+
+    .memory-zone{
+        height:180vh;
+    }
+
+    .memory-card{
+        width:68vw;
+    }
+
+    .timeline{
+        width:88%;
+    }
+
+    .months{
+        gap:7px;
+    }
+
+    .month{
+        width:11px;
+        height:11px;
+    }
+
+    .month::after{
+        font-size:5px;
+        top:20px;
+    }
+
+    .ten-display{
+        margin-top:100px;
+    }
+
+    .letter-section{
+        height:150vh;
+    }
+
+    #touchHint{
+        opacity:1;
+    }
+
+}
+
+</style>
+</head>
+
+<body class="loading">
+
+<div id="loader">
+
+    <div class="loader-core">
+
+        <div class="loader-orb"></div>
+
+        <div class="loader-text">
+            preparing our little universe
+        </div>
+
+    </div>
+
+</div>
+
+<div class="noise"></div>
+
+<canvas id="webgl"></canvas>
+
+<div class="cursor"></div>
+
+<button
+    class="music"
+    id="musicBtn"
+    aria-label="Toggle music"
+>
+
+    <span class="sound-bars">
+
+        <i></i>
+        <i></i>
+        <i></i>
+
+    </span>
+
+</button>
+
+<div class="progress">
+
+    <div class="progress-fill"></div>
+
+</div>
+
+<div id="touchHint">
+
+    touch the screen · then keep scrolling
+
+</div>
+
+<div id="intro">
+
+    <div class="intro-content">
+
+        <div class="intro-date">
+            22
+        </div>
+
+        <div class="intro-month">
+            October
+        </div>
+
+        <div class="intro-small">
+            The day our story began.
+        </div>
+
+    </div>
+
+</div>
+
+<audio
+    id="music"
+    loop
+    preload="none"
+>
+
+    <source
+        src="assets/audio/music.mp3"
+        type="audio/mpeg"
+    >
+
+</audio>
+
+<div id="easterEgg">
+
+    <div class="egg-inner">
+
+        <small>
+            a secret, just for you
+        </small>
+
+        you found<br>
+
+        the little secret. ♡
+
+        <br>
+
+        <button class="egg-close">
+            close
+        </button>
+
+    </div>
+
+</div>
+
+<main id="story">
+
+<section class="chapter">
+
+    <div class="chapter-inner">
+
+        <div class="chapter-number">
+            Chapter I · 22.10
+        </div>
+
+        <h1 class="chapter-title">
+
+            It<br>
+            started<br>
+            here.
+
+        </h1>
+
+    </div>
+
+</section>
+
+<section
+    class="memory-zone"
+    id="memories"
+>
+
+    <div class="memory-stage">
+
+        <div
+            class="memory-card"
+            style="
+                --x:-30vw;
+                --y:-10vh;
+                --r:-9deg;
+            "
+        >
+
+            <img
+                src="assets/images/memory-01.webp"
+            >
+
+            <div class="memory-label">
+                22.10 · 01
+            </div>
+
+        </div>
+
+        <div
+            class="memory-card"
+            style="
+                --x:25vw;
+                --y:-12vh;
+                --r:7deg;
+            "
+        >
+
+            <img
+                src="assets/images/memory-02.webp"
+            >
+
+            <div class="memory-label">
+                memory · 02
+            </div>
+
+        </div>
+
+        <div
+            class="memory-card"
+            style="
+                --x:-18vw;
+                --y:15vh;
+                --r:4deg;
+            "
+        >
+
+            <video
+                src="assets/videos/memory-01.mp4"
+                muted
+                playsinline
+                loop
+                preload="metadata"
+            ></video>
+
+            <div class="memory-label">
+                memory · video
+            </div>
+
+        </div>
+
+        <div
+            class="memory-card"
+            style="
+                --x:15vw;
+                --y:17vh;
+                --r:-5deg;
+            "
+        >
+
+            <img
+                src="assets/images/memory-03.webp"
+            >
+
+            <div class="memory-label">
+                memory · 03
+            </div>
+
+        </div>
+
+        <div class="memory-hint">
+
+            keep scrolling · memories appear in time
+
+        </div>
+
+    </div>
+
+</section>
+
+<section
+    class="chapter"
+    id="timeline"
+>
+
+    <div class="chapter-inner">
+
+        <div class="timeline">
+
+            <div class="timeline-line"></div>
+
+            <div class="months">
+
+                <div class="month" data-month="01"></div>
+                <div class="month" data-month="02"></div>
+                <div class="month" data-month="03"></div>
+                <div class="month" data-month="04"></div>
+                <div class="month" data-month="05"></div>
+                <div class="month" data-month="06"></div>
+                <div class="month" data-month="07"></div>
+                <div class="month" data-month="08"></div>
+                <div class="month" data-month="09"></div>
+                <div class="month" data-month="10"></div>
+
+            </div>
+
+            <div class="ten-display">
+
+                <div class="ten">
+                    10
+                </div>
+
+                <div class="ten-caption">
+                    months · countless little moments
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section
+    class="chapter"
+    id="heartScene"
+>
+
+    <div class="heart-title">
+
+        <small>
+            ten moments became one story
+        </small>
+
+        <h2>
+
+            something<br>
+            remained.
+
+        </h2>
+
+    </div>
+
+</section>
+
+<section
+    class="chapter"
+    id="universe"
+>
+
+    <div class="universe-copy">
+
+        <p>
+
+            Some moments pass.
+
+            <br><br>
+
+            Some stay.
+
+            <br><br>
+
+            And some become
+
+            <br>
+
+            your world.
+
+        </p>
+
+    </div>
+
+</section>
+
+<section class="letter-section">
+
+    <div class="letter-wrap">
+
+        <div
+            class="envelope"
+            id="envelope"
+        >
+
+            <div class="env-body"></div>
+
+            <div class="letter">
+                For you.
+            </div>
+
+            <div class="env-flap"></div>
+
+        </div>
+
+        <div
+            class="letter-message"
+            id="letterMessage"
+        >
+
+Ten months.
+
+Ten months of little moments,
+memories,
+conversations,
+laughter,
+and everything in between.
+
+I don't know what the next chapters look like yet.
+
+But I'm glad this one began.
+
+        </div>
+
+        <div class="letter-hint">
+            tap the envelope
+        </div>
+
+    </div>
+
+</section>
+
+<section
+    class="chapter"
+    id="ending"
+>
+
+    <div class="final">
+
+        <div class="final-date">
+            22.10
+        </div>
+
+        <div class="final-line"></div>
+
+        <div class="final-date">
+            22.08
+        </div>
+
+        <div class="final-line"></div>
+
+        <div class="final-title">
+            10 months of our story.
+        </div>
+
+        <div class="final-sub">
+            and this is only the beginning
+        </div>
+
+        <div id="finalHeart">
+            ♥
+        </div>
+
+        <button
+            class="replay"
+            id="replay"
+        >
+            replay our story
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+
+<script type="module">
+
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+
+import { gsap } from "https://cdn.jsdelivr.net/npm/gsap@3.13.0/index.js";
+
+import { ScrollTrigger } from "https://cdn.jsdelivr.net/npm/gsap@3.13.0/ScrollTrigger.js";
+
+import Lenis from "https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.mjs";
+
+gsap.registerPlugin(ScrollTrigger);
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const body =
+    document.body;
+
+const loader =
+    document.getElementById("loader");
+
+const intro =
+    document.getElementById("intro");
+
+const introDate =
+    document.querySelector(".intro-date");
+
+const introMonth =
+    document.querySelector(".intro-month");
+
+const introSmall =
+    document.querySelector(".intro-small");
+
+const music =
+    document.getElementById("music");
+
+const musicBtn =
+    document.getElementById("musicBtn");
+
+const progressFill =
+    document.querySelector(".progress-fill");
+
+const envelope =
+    document.getElementById("envelope");
+
+const replay =
+    document.getElementById("replay");
+
+const egg =
+    document.getElementById("easterEgg");
+
+const eggClose =
+    document.querySelector(".egg-close");
+
+const finalHeart =
+    document.getElementById("finalHeart");
+
+
+/* =========================================================
+   LENIS
+========================================================= */
+
+const lenis =
+    new Lenis({
+
+        duration:1.25,
+
+        smoothWheel:true,
+
+        smoothTouch:false
+
+    });
+
+
+function raf(time){
+
+    lenis.raf(time);
+
+    requestAnimationFrame(raf);
+
+}
+
+requestAnimationFrame(raf);
+
+lenis.on(
+    "scroll",
+    ScrollTrigger.update
+);
+
+
+/* =========================================================
+   THREE.JS
+========================================================= */
+
+const canvas =
+    document.getElementById("webgl");
+
+const renderer =
+    new THREE.WebGLRenderer({
+
+        canvas,
+
+        antialias:true,
+
+        alpha:true,
+
+        powerPreference:
+            "high-performance"
+
+    });
+
+renderer.setPixelRatio(
+    Math.min(
+        devicePixelRatio || 1,
+        1.7
+    )
+);
+
+renderer.setSize(
+    innerWidth,
+    innerHeight
+);
+
+renderer.outputColorSpace =
+    THREE.SRGBColorSpace;
+
+const scene =
+    new THREE.Scene();
+
+scene.fog =
+    new THREE.FogExp2(
+        0x050507,
+        .035
+    );
+
+const camera =
+    new THREE.PerspectiveCamera(
+
+        55,
+
+        innerWidth / innerHeight,
+
+        .1,
+
+        2000
+
+    );
+
+camera.position.set(
+    0,
+    0,
+    18
+);
+
+
+/* =========================================================
+   PARTICLES
+========================================================= */
+
+const mobile =
+    innerWidth < 700;
+
+const count =
+    mobile ? 2200 : 6000;
+
+const pos =
+    new Float32Array(
+        count * 3
+    );
+
+const base =
+    new Float32Array(
+        count * 3
+    );
+
+const phase =
+    new Float32Array(count);
+
+for(
+    let i=0;
+    i<count;
+    i++
+){
+
+    const radius =
+        15 +
+        Math.random() * 35;
+
+    const theta =
+        Math.random() *
+        Math.PI * 2;
+
+    const phi =
+        Math.acos(
+            2 * Math.random() - 1
+        );
+
+    const j =
+        i * 3;
+
+    pos[j] =
+    base[j] =
+        radius *
+        Math.sin(phi) *
+        Math.cos(theta);
+
+    pos[j+1] =
+    base[j+1] =
+        radius *
+        Math.sin(phi) *
+        Math.sin(theta);
+
+    pos[j+2] =
+    base[j+2] =
+        radius *
+        Math.cos(phi);
+
+    phase[i] =
+        Math.random() *
+        Math.PI * 2;
+
+}
+
+const particleGeometry =
+    new THREE.BufferGeometry();
+
+particleGeometry.setAttribute(
+
+    "position",
+
+    new THREE.BufferAttribute(
+        pos,
+        3
+    )
+
+);
+
+const particleMaterial =
+    new THREE.PointsMaterial({
+
+        color:0xffffff,
+
+        size:
+            mobile
+            ? .035
+            : .045,
+
+        transparent:true,
+
+        opacity:.72,
+
+        depthWrite:false,
+
+        blending:
+            THREE.AdditiveBlending
+
+    });
+
+const particles =
+    new THREE.Points(
+        particleGeometry,
+        particleMaterial
+    );
+
+scene.add(particles);
+
+
+/* =========================================================
+   HEART PARTICLES
+========================================================= */
+
+const heartCount =
+    mobile
+    ? 1100
+    : 2800;
+
+const heartPositions =
+    new Float32Array(
+        heartCount * 3
+    );
+
+for(
+    let i=0;
+    i<heartCount;
+    i++
+){
+
+    const t =
+        Math.random() *
+        Math.PI * 2;
+
+    const j =
+        i * 3;
+
+    heartPositions[j] =
+
+        16 *
+        Math.pow(
+            Math.sin(t),
+            3
+        ) *
+        .12
+        +
+        (Math.random()-.5)
+        *
+        .12;
+
+    heartPositions[j+1] =
+
+        (
+            13 *
+            Math.cos(t)
+
+            -
+
+            5 *
+            Math.cos(2*t)
+
+            -
+
+            2 *
+            Math.cos(3*t)
+
+            -
+
+            Math.cos(4*t)
+
+        )
+        *
+        .12
+
+        +
+
+        (Math.random()-.5)
+        *
+        .12;
+
+    heartPositions[j+2] =
+
+        (Math.random()-.5)
+        *
+        .7;
+
+}
+
+const heartGeometry =
+    new THREE.BufferGeometry();
+
+heartGeometry.setAttribute(
+
+    "position",
+
+    new THREE.BufferAttribute(
+        heartPositions,
+        3
+    )
+
+);
+
+const heartMaterial =
+    new THREE.PointsMaterial({
+
+        color:0xe8b8b9,
+
+        size:
+            mobile
+            ? .045
+            : .065,
+
+        transparent:true,
+
+        opacity:0,
+
+        depthWrite:false,
+
+        blending:
+            THREE.AdditiveBlending
+
+    });
+
+const heart =
+    new THREE.Points(
+        heartGeometry,
+        heartMaterial
+    );
+
+heart.scale.setScalar(3.2);
+
+scene.add(heart);
+
+const light =
+    new THREE.PointLight(
+        0xe8b8b9,
+        0,
+        50
+    );
+
+scene.add(light);
+
+
+/* =========================================================
+   AUDIO ANALYSER
+========================================================= */
+
+let audioContext;
+
+let analyser;
+
+let audioData;
+
+async function initializeAudio(){
+
+    try{
+
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+        const source =
+            audioContext
+            .createMediaElementSource(
+                music
+            );
+
+        analyser =
+            audioContext
+            .createAnalyser();
+
+        analyser.fftSize =
+            128;
+
+        source.connect(
+            analyser
+        );
+
+        analyser.connect(
+            audioContext.destination
+        );
+
+        audioData =
+            new Uint8Array(
+                analyser.frequencyBinCount
+            );
+
+    }
+    catch(error){
+
+        console.warn(
+            "Audio analyser unavailable."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   INTRO ANIMATION
+========================================================= */
+
+const introTimeline =
+    gsap.timeline({
+
+        delay:.5
+
+    });
+
+introTimeline
+
+.to(
+
+    introDate,
+
+    {
+
+        opacity:1,
+
+        scale:1,
+
+        filter:"blur(0px)",
+
+        duration:1.8,
+
+        ease:"power4.out"
+
+    }
+
+)
+
+.to(
+
+    introMonth,
+
+    {
+
+        opacity:1,
+
+        duration:1
+
+    },
+
+    "-=.7"
+
+)
+
+.to(
+
+    introSmall,
+
+    {
+
+        opacity:1,
+
+        duration:1
+
+    },
+
+    "-=.6"
+
+)
+
+.to(
+
+    introDate,
+
+    {
+
+        opacity:0,
+
+        scale:1.2,
+
+        filter:"blur(10px)",
+
+        duration:1.2,
+
+        delay:1.2
+
+    }
+
+)
+
+.to(
+
+    introMonth,
+
+    {
+
+        opacity:0,
+
+        duration:.5
+
+    },
+
+    "<"
+
+)
+
+.to(
+
+    introSmall,
+
+    {
+
+        opacity:0,
+
+        duration:.5
+
+    },
+
+    "<"
+
+)
+
+.to(
+
+    intro,
+
+    {
+
+        opacity:0,
+
+        duration:1.4,
+
+        onComplete(){
+
+            intro.style.display =
+                "none";
+
+            body.classList.remove(
+                "loading"
+            );
+
+            body.classList.add(
+                "ready"
+            );
+
+            ScrollTrigger.refresh();
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   LOADER
+========================================================= */
+
+window.addEventListener(
+
+    "load",
+
+    () => {
+
+        setTimeout(
+
+            () =>
+                loader.classList.add(
+                    "hide"
+                ),
+
+            1000
+
+        );
+
+    }
+
+);
+
+
+/* =========================================================
+   SCROLL CAMERA
+========================================================= */
+
+gsap.to(
+
+    camera.position,
+
+    {
+
+        z:2,
+
+        y:-1,
+
+        scrollTrigger:{
+
+            trigger:".chapter",
+
+            start:"top top",
+
+            end:"bottom top",
+
+            scrub:1.5
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   PARTICLE ROTATION
+========================================================= */
+
+gsap.to(
+
+    particles.rotation,
+
+    {
+
+        z:Math.PI*.8,
+
+        scrollTrigger:{
+
+            trigger:".chapter",
+
+            start:"top top",
+
+            end:"bottom top",
+
+            scrub:2
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   MEMORY CARDS
+========================================================= */
+
+document
+.querySelectorAll(".memory-card")
+.forEach(
+
+    (card,index)=>{
+
+        gsap.fromTo(
+
+            card,
+
+            {
+
+                scale:.7,
+
+                opacity:0,
+
+                filter:"blur(12px)"
+
+            },
+
+            {
+
+                scale:1,
+
+                opacity:.95,
+
+                filter:"blur(0)",
+
+                scrollTrigger:{
+
+                    trigger:"#memories",
+
+                    start:
+                        `${index*12}% top`,
+
+                    end:
+                        `${index*12+25}% top`,
+
+                    scrub:1
+
+                }
+
+            }
+
+        );
+
+    }
+
+);
+
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+document
+.querySelectorAll(".month")
+.forEach(
+
+    (month,index)=>{
+
+        ScrollTrigger.create({
+
+            trigger:"#timeline",
+
+            start:
+                `${index*7}% top`,
+
+            end:
+                `${index*7+18}% top`,
+
+            onEnter(){
+
+                month.classList.add(
+                    "active"
+                );
+
+            },
+
+            onEnterBack(){
+
+                month.classList.add(
+                    "active"
+                );
+
+            }
+
+        });
+
+    }
+
+);
+
+
+/* =========================================================
+   BIG 10
+========================================================= */
+
+gsap.fromTo(
+
+    ".ten",
+
+    {
+
+        scale:.3,
+
+        opacity:0,
+
+        filter:"blur(30px)"
+
+    },
+
+    {
+
+        scale:1,
+
+        opacity:1,
+
+        filter:"blur(0)",
+
+        scrollTrigger:{
+
+            trigger:"#timeline",
+
+            start:"25% center",
+
+            end:"75% center",
+
+            scrub:1.5
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   10 -> HEART
+========================================================= */
+
+gsap.to(
+
+    ".ten",
+
+    {
+
+        scale:1.8,
+
+        opacity:0,
+
+        filter:"blur(20px)",
+
+        scrollTrigger:{
+
+            trigger:"#heartScene",
+
+            start:"top bottom",
+
+            end:"center center",
+
+            scrub:1.5
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   HEART SCENE
+========================================================= */
+
+ScrollTrigger.create({
+
+    trigger:"#heartScene",
+
+    start:"top center",
+
+    end:"bottom center",
+
+    onEnter(){
+
+        gsap.to(
+
+            heartMaterial,
+
+            {
+
+                opacity:.9,
+
+                duration:2
+
+            }
+
+        );
+
+        gsap.to(
+
+            light,
+
+            {
+
+                intensity:4,
+
+                duration:2
+
+            }
+
+        );
+
+    },
+
+    onLeave(){
+
+        gsap.to(
+
+            heartMaterial,
+
+            {
+
+                opacity:0,
+
+                duration:1
+
+            }
+
+        );
+
+        gsap.to(
+
+            light,
+
+            {
+
+                intensity:0,
+
+                duration:1
+
+            }
+
+        );
+
+    },
+
+    onEnterBack(){
+
+        gsap.to(
+
+            heartMaterial,
+
+            {
+
+                opacity:.9,
+
+                duration:1.5
+
+            }
+
+        );
+
+        gsap.to(
+
+            light,
+
+            {
+
+                intensity:4,
+
+                duration:1.5
+
+            }
+
+        );
+
+    }
+
+});
+
+
+/* =========================================================
+   UNIVERSE
+========================================================= */
+
+gsap.to(
+
+    particles.rotation,
+
+    {
+
+        x:Math.PI*.25,
+
+        y:Math.PI*1.5,
+
+        scrollTrigger:{
+
+            trigger:"#universe",
+
+            start:"top bottom",
+
+            end:"bottom top",
+
+            scrub:2
+
+        }
+
+    }
+
+);
+
+
+gsap.from(
+
+    ".universe-copy p",
+
+    {
+
+        opacity:0,
+
+        y:80,
+
+        filter:"blur(15px)",
+
+        scrollTrigger:{
+
+            trigger:"#universe",
+
+            start:"top center",
+
+            end:"center center",
+
+            scrub:1
+
+        }
+
+    }
+
+);
+
+
+/* =========================================================
+   ENVELOPE
+========================================================= */
+
+envelope.onclick =
+function(){
+
+    envelope.classList.toggle(
+        "open"
+    );
+
+};
+
+
+/* =========================================================
+   MUSIC BUTTON
+========================================================= */
+
+musicBtn.onclick =
+async function(){
+
+    if(music.paused){
+
+        try{
+
+            if(!audioContext)
+                await initializeAudio();
+
+            if(
+                audioContext &&
+                audioContext.state ===
+                "suspended"
+            ){
+
+                await audioContext.resume();
+
+            }
+
+            await music.play();
+
+            musicBtn.classList.add(
+                "playing"
+            );
+
+        }
+        catch(error){
+
+            console.log(error);
+
+        }
+
+    }
+    else{
+
+        music.pause();
+
+        musicBtn.classList.remove(
+            "playing"
+        );
+
+    }
+
+};
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+window.addEventListener(
+
+    "scroll",
+
+    ()=>{
+
+        const max =
+            document.documentElement
+            .scrollHeight -
+            innerHeight;
+
+        const progress =
+            max > 0
+            ? scrollY / max
+            : 0;
+
+        progressFill.style.height =
+            progress * 100 + "%";
+
+    },
+
+    {
+        passive:true
+    }
+
+);
+
+
+/* =========================================================
+   VIDEO AUTO PLAY
+========================================================= */
+
+const videos =
+    document.querySelectorAll(
+        "video"
+    );
+
+const videoObserver =
+    new IntersectionObserver(
+
+        entries => {
+
+            entries.forEach(
+
+                entry => {
+
+                    if(
+                        entry.isIntersecting
+                    ){
+
+                        entry.target
+                            .play()
+                            .catch(()=>{});
+
+                    }
+                    else{
+
+                        entry.target.pause();
+
+                    }
+
+                }
+
+            );
+
+        },
+
+        {
+            threshold:.35
+        }
+
+    );
+
+videos.forEach(
+    video =>
+        videoObserver.observe(video)
+);
+
+
+/* =========================================================
+   EASTER EGG
+========================================================= */
+
+let taps = 0;
+
+let tapTimer;
+
+window.addEventListener(
+
+    "pointerdown",
+
+    ()=>{
+
+        clearTimeout(
+            tapTimer
+        );
+
+        taps++;
+
+        if(taps >= 5){
+
+            egg.classList.add(
+                "show"
+            );
+
+            taps=0;
+
+        }
+
+        tapTimer =
+            setTimeout(
+
+                ()=>{
+                    taps=0;
+                },
+
+                1300
+
+            );
+
+    }
+
+);
+
+eggClose.onclick =
+function(){
+
+    egg.classList.remove(
+        "show"
+    );
+
+};
+
+egg.onclick =
+function(event){
+
+    if(
+        event.target === egg
+    ){
+
+        egg.classList.remove(
+            "show"
+        );
+
+    }
+
+};
+
+
+/* =========================================================
+   MOBILE TOUCH
+========================================================= */
+
+let touchStartY=0;
+
+window.addEventListener(
+
+    "touchstart",
+
+    event => {
+
+        touchStartY =
+            event.touches[0].clientY;
+
+    },
+
+    {
+        passive:true
+    }
+
+);
+
+window.addEventListener(
+
+    "touchmove",
+
+    event => {
+
+        const difference =
+            touchStartY -
+            event.touches[0].clientY;
+
+        if(
+            Math.abs(difference)>20
+        ){
+
+            heart.rotation.y +=
+                difference*.0008;
+
+            heart.rotation.x +=
+                difference*.00025;
+
+        }
+
+    },
+
+    {
+        passive:true
+    }
+
+);
+
+
+/* =========================================================
+   MUSIC REACTIVE
+========================================================= */
+
+let lastScroll = 0;
+
+window.addEventListener(
+
+    "scroll",
+
+    ()=>{
+
+        const delta =
+            Math.abs(
+                scrollY-lastScroll
+            );
+
+        if(
+            analyser &&
+            delta>0
+        ){
+
+            const strength =
+                Math.min(
+                    delta/100,
+                    1
+                );
+
+            gsap.to(
+
+                particleMaterial,
+
+                {
+
+                    size:
+                        (mobile?.035:.045)
+                        *
+                        (
+                            1 +
+                            strength*.8
+                        ),
+
+                    duration:.15,
+
+                    overwrite:true
+
+                }
+
+            );
+
+        }
+
+        lastScroll =
+            scrollY;
+
+    },
+
+    {
+        passive:true
+    }
+
+);
+
+
+/* =========================================================
+   RENDER LOOP
+========================================================= */
+
+function render(){
+
+    const time =
+        performance.now()*.001;
+
+    let beat=0;
+
+    if(analyser){
+
+        analyser.getByteFrequencyData(
+            audioData
+        );
+
+        for(
+            let i=0;
+            i<audioData.length;
+            i++
+        ){
+
+            beat +=
+                audioData[i];
+
+        }
+
+        beat /=
+            audioData.length *
+            255;
+
+    }
+
+    particles.rotation.y =
+        time*.012;
+
+    const positions =
+        particleGeometry
+        .attributes
+        .position
+        .array;
+
+    for(
+        let i=0;
+        i<count;
+        i++
+    ){
+
+        const j=i*3;
+
+        const movement =
+            Math.sin(
+                time*1.2 +
+                phase[i]
+            )
+            *
+            .012
+            *
+            (
+                1+
+                beat*4
+            );
+
+        positions[j] =
+            base[j] +
+            movement;
+
+        positions[j+1] =
+            base[j+1] +
+            movement;
+
+    }
+
+    particleGeometry
+        .attributes
+        .position
+        .needsUpdate=true;
+
+    heart.rotation.y =
+        time*.15;
+
+    heart.rotation.x =
+        Math.sin(
+            time*.2
+        )*.05;
+
+    const pulse =
+
+        1 +
+
+        Math.sin(
+            time*2.2
+        )*.025 +
+
+        beat*.12;
+
+    heart.scale.setScalar(
+        3.2*pulse
+    );
+
+    light.position.x =
+        Math.sin(time)*4;
+
+    light.position.y =
+        Math.cos(time)*3;
+
+    if(
+        beat>.18
+    ){
+
+        light.intensity =
+            Math.max(
+                light.intensity,
+                2+beat*7
+            );
+
+    }
+
+    renderer.render(
+        scene,
+        camera
+    );
+
+    requestAnimationFrame(
+        render
+    );
+
+}
+
+render();
+
+
+/* =========================================================
+   FINAL HEART
+========================================================= */
+
+ScrollTrigger.create({
+
+    trigger:"#ending",
+
+    start:"25% center",
+
+    end:"70% center",
+
+    scrub:1,
+
+    onUpdate(self){
+
+        const progress =
+            self.progress;
+
+        gsap.to(
+
+            finalHeart,
+
+            {
+
+                opacity:progress,
+
+                filter:
+                    `blur(${
+                        20 -
+                        20*progress
+                    }px)`,
+
+                scale:
+                    1 +
+                    progress*1.4,
+
+                duration:.1,
+
+                overwrite:true
+
+            }
+
+        );
+
+    }
+
+});
+
+
+/* =========================================================
+   REPLAY
+========================================================= */
+
+replay.onclick =
+function(){
+
+    lenis.scrollTo(
+
+        0,
+
+        {
+            duration:2.5
+        }
+
+    );
+
+    envelope.classList.remove(
+        "open"
+    );
+
+    music.currentTime=0;
+
+};
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener(
+
+    "resize",
+
+    ()=>{
+
+        camera.aspect =
+            innerWidth /
+            innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setPixelRatio(
+
+            Math.min(
+
+                devicePixelRatio || 1,
+
+                innerWidth<700
+                ? 1.2
+                : 1.7
+
+            )
+
+        );
+
+        renderer.setSize(
+            innerWidth,
+            innerHeight
+        );
+
+        ScrollTrigger.refresh();
+
+    }
+
+);
+
+</script>
+
+</body>
+</html>
